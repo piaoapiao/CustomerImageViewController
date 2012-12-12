@@ -30,6 +30,21 @@
                    {
                        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
                        
+                       ALAssetsGroupEnumerationResultsBlock groupEnumerAtion = ^(ALAsset *result, NSUInteger index, BOOL *stop){
+                           if (result!=NULL) {
+                               
+                               if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto])
+                               {
+                                   //                                   [self addImage:[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]
+                                   //                                       SmallImage:[UIImage imageWithCGImage:result.thumbnail]];
+                                   NSLog(@"bigImage:%@",[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]);
+                                   
+                               }
+                           }
+                           
+                       };
+                       
+                       
                        void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop)
                        {
                            if (group == nil)
@@ -37,9 +52,29 @@
                                return;
                            }
                            
+                           //                           NSLog(@"count: %d", [group numberOfAssets]);
+                           //                           NSLog(@"count: %@", group);
+                           //                           NSLog(@"count: %@", [group class]);
+                           
+                           NSString *str = [NSString stringWithFormat:@"%@", [group valueForProperty:ALAssetsGroupPropertyName]];
+                           
+                           NSLog(@"name:%@",str);
+                           
                            [self.assetGroups addObject:group];
                            
                            NSLog(@"count: %d", [group numberOfAssets]);
+                           
+                           if ([str isEqualToString:@"Saved Photos"])
+                           {
+                               [group enumerateAssetsUsingBlock:groupEnumerAtion];
+                               
+                               // [albumArray addObject:group];
+                               NSString *str = [NSString stringWithFormat:@"%d", [group numberOfAssets]];
+                               
+                               //   [picsInAlbumArray addObject:str];
+                               
+                               //   [albumListTable reloadData];
+                           }
                            
                            // Reload albums
                            [self performSelectorOnMainThread:@selector(showImageView:) withObject:self.assetGroups  waitUntilDone:YES];
@@ -56,9 +91,9 @@
                        };
                        
                        // Enumerate Albums
-                       ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];        
+                       ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
                        [library enumerateGroupsWithTypes:ALAssetsGroupAll
-                                              usingBlock:assetGroupEnumerator 
+                                              usingBlock:assetGroupEnumerator
                                             failureBlock:assetGroupEnumberatorFailure];
                        
                        //  vtypedef void (^ALAssetsLibraryGroupsEnumerationResultsBlock)(ALAssetsGroup *group, BOOL *stop);
@@ -66,8 +101,8 @@
                        
                        [library release];
                        [pool release];
-                   }); 
-
+                   });
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -85,23 +120,26 @@
         imageScrollView.delegate = self;
         [self.view addSubview:imageScrollView];
         
-//        NSMutableArray *conArray = [NSMutableArray array];
-//        NSArray *vecArr = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[imageScrollView]-40-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(imageScrollView)];
-//        NSArray *horArr = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[imageScrollView]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(imageScrollView)];
-//        [conArray addObjectsFromArray:vecArr];
-//        [conArray addObjectsFromArray:horArr];
-//        [self.view addConstraints:horArr];
+        NSMutableArray *conArray = [NSMutableArray array];
+        NSArray *vecArr = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[imageScrollView]-40-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(imageScrollView)];
+        NSArray *horArr = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[imageScrollView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(imageScrollView)];
+        [conArray addObjectsFromArray:vecArr];
+        [conArray addObjectsFromArray:horArr];
+        [self.view addConstraints:conArray];
     }
-  
+    
     return imageScrollView;
-
+    
 }
 
 -(void)showImageView:(NSArray *)imageList
 {
- //   self.imageScrollView = nil;
+    //   self.imageScrollView = nil;
     self.imageScrollView.backgroundColor = [UIColor redColor];
-
+    id  res = imageList[0];
+    
+    
+    
 }
 
 
