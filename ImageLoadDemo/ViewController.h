@@ -12,6 +12,7 @@
 {
 	NSMutableArray *assetGroups;
     UIScrollView *imageScrollView;
+    NSMutableArray *imageArray;
 }
 
 @property (nonatomic, retain) NSMutableArray *assetGroups;

@@ -26,6 +26,8 @@
 	self.assetGroups = tempArray;
     [tempArray release];
     
+    imageArray = [[NSMutableArray alloc] init];
+    
     dispatch_async(dispatch_get_main_queue(), ^
                    {
                        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -38,6 +40,7 @@
                                    //                                   [self addImage:[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]
                                    //                                       SmallImage:[UIImage imageWithCGImage:result.thumbnail]];
                                    NSLog(@"bigImage:%@",[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]);
+                                   [imageArray addObject:[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]];
                                    
                                }
                            }
@@ -63,17 +66,17 @@
                            [self.assetGroups addObject:group];
                            
                            NSLog(@"count: %d", [group numberOfAssets]);
-                           
-                           if ([str isEqualToString:@"Saved Photos"])
+                           //                           if ([str isEqualToString:@"Saved Photos"])
                            {
                                [group enumerateAssetsUsingBlock:groupEnumerAtion];
                                
                                // [albumArray addObject:group];
-                               NSString *str = [NSString stringWithFormat:@"%d", [group numberOfAssets]];
+                          //     NSString *str = [NSString stringWithFormat:@"%d", [group numberOfAssets]];
                                
                                //   [picsInAlbumArray addObject:str];
                                
                                //   [albumListTable reloadData];
+                               [self showImageView:imageArray];
                            }
                            
                            // Reload albums
@@ -136,7 +139,41 @@
 {
     //   self.imageScrollView = nil;
     self.imageScrollView.backgroundColor = [UIColor redColor];
-    id  res = imageList[0];
+   // id  res = imageList[0];
+    int padding = 10;
+    int lineNum = 3;
+
+    float imageWidth = self.view.frame.size.width/lineNum -padding*(lineNum +1)/lineNum;
+    
+    float imageHeight = imageWidth;
+    float temp = (self.imageScrollView.frame.size.height-padding)/(imageHeight+ padding);
+    float tempInt = (int)temp;
+    float rowNum;
+    if(temp == tempInt)
+    {
+         rowNum = (self.imageScrollView.frame.size.height-padding)/(imageHeight+ padding);
+    }
+    else
+    {
+         rowNum = (self.imageScrollView.frame.size.height-padding)/(imageHeight+ padding)+1;    
+    }
+    
+    for(int i = 0;i<imageList.count;i++)
+    {
+        int imageIndex = i%lineNum;
+        
+        int imagerow = i/lineNum;
+        
+        float imageXOffset = padding + (imageWidth + padding)*imageIndex;
+        
+        float imageYOffset = padding + (imageHeight + padding)*imagerow;
+       
+        UIImageView *test = [[UIImageView alloc] initWithFrame:CGRectMake(imageXOffset, imageYOffset, imageWidth, imageHeight)];
+        
+        test.image = imageArray[i];
+        [imageScrollView addSubview:test];
+    }
+    
     
     
     
