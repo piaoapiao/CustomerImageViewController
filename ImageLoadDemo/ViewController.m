@@ -86,6 +86,7 @@
                        // Group Enumerator Failure Block
                        void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
                            
+                           
                            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Album Error: %@", [error description]] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                            [alert show];
                            [alert release];
