@@ -17,9 +17,28 @@
 @synthesize assetGroups;
 @synthesize imageScrollView;
 
+
+-(BOOL)isSupportAutoLayOut
+{
+  //  int version = [[[UIDevice currentDevice].systemVersion substringToIndex:1] intValue];
+    int version = [[UIDevice currentDevice].systemVersion intValue];
+    if(version == 6)
+    {
+        return YES;
+    }
+    return NO;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+  //  NSString
+    
+    
+    
+
+    
 	// Do any additional setup after loading the view, typically from a nib.
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
@@ -36,11 +55,10 @@
                            if (result!=NULL) {
                                
                                if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto])
-                               {
-                                   //                                   [self addImage:[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]
-                                   //                                       SmallImage:[UIImage imageWithCGImage:result.thumbnail]];
-                                   NSLog(@"bigImage:%@",[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]);
-                                   [imageArray addObject:[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]];
+                               {  
+//                                    NSLog(@"bigImage:%@",[UIImage imageWithCGImage:result.thumbnail]);
+                      //             [imageArray addObject:[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]];
+                                     [imageArray addObject:[UIImage imageWithCGImage:result.thumbnail]];
                                    
                                }
                            }
@@ -119,28 +137,51 @@
 {
     if(nil == imageScrollView)
     {
-        imageScrollView  = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 400)];
-        [imageScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        imageScrollView.delegate = self;
-        [self.view addSubview:imageScrollView];
+        if([self isSupportAutoLayOut])
+        {
+            NSLog(@"AutoLayOut");
+            
+            imageScrollView  = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+            [imageScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+            int h = imageScrollView.contentSize.height;
+            int w = imageScrollView.contentSize.width;
+            NSLog(@"H:%d,W:%d",h,w);
+
+            h = imageScrollView.contentSize.height;
+             w = imageScrollView.contentSize.width;
+            NSLog(@"H:%d,W:%d",h,w);
+            imageScrollView.delegate = self;
+            [self.view addSubview:imageScrollView];
+            
+            NSMutableArray *conArray = [NSMutableArray array];
+            NSArray *vecArr = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[imageScrollView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(imageScrollView)];
+            NSArray *horArr = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[imageScrollView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(imageScrollView)];
+            [conArray addObjectsFromArray:vecArr];
+            [conArray addObjectsFromArray:horArr];
+            [self.view addConstraints:conArray];
+        }
+        else
+        {
+             NSLog(@"manualLayOut");
+             imageScrollView  = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+             imageScrollView.delegate = self;
+             [self.view addSubview:imageScrollView];
         
-        NSMutableArray *conArray = [NSMutableArray array];
-        NSArray *vecArr = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[imageScrollView]-40-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(imageScrollView)];
-        NSArray *horArr = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[imageScrollView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(imageScrollView)];
-        [conArray addObjectsFromArray:vecArr];
-        [conArray addObjectsFromArray:horArr];
-        [self.view addConstraints:conArray];
+        }
     }
     
     return imageScrollView;
     
+    
 }
 
+
+//展示图片
 -(void)showImageView:(NSArray *)imageList
 {
-    //   self.imageScrollView = nil;
+    
     self.imageScrollView.backgroundColor = [UIColor redColor];
-   // id  res = imageList[0];
+
     int padding = 10;
     int lineNum = 3;
 
@@ -159,7 +200,7 @@
          rowNum = (self.imageScrollView.frame.size.height-padding)/(imageHeight+ padding)+1;    
     }
     
-    for(int i = 0;i<imageList.count;i++)
+    for(int i = 0;i<imageArray.count;i++)
     {
         int imageIndex = i%lineNum;
         
@@ -169,16 +210,42 @@
         
         float imageYOffset = padding + (imageHeight + padding)*imagerow;
        
-        UIImageView *test = [[UIImageView alloc] initWithFrame:CGRectMake(imageXOffset, imageYOffset, imageWidth, imageHeight)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageXOffset, imageYOffset, imageWidth, imageHeight)];
         
-        test.image = imageArray[i];
-        [imageScrollView addSubview:test];
+        imageView.tag = i;
+        
+        imageView.image = imageArray[i];
+        
+        imageView.userInteractionEnabled = YES;
+        
+        UITapGestureRecognizer *tapGuest = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                   action:@selector(selectImage:)];
+        tapGuest.numberOfTouchesRequired = 1; //手指数
+        tapGuest.numberOfTapsRequired = 1; //tap次数
+        tapGuest.delegate = self;
+        
+        [imageView addGestureRecognizer:tapGuest];
+        
+        [tapGuest release];
+       
+        [imageScrollView addSubview:imageView];
+        
+        [imageScrollView setContentSize:CGSizeMake(self.view.frame.size.width, imageYOffset + imageHeight + padding )];
     }
-    
-    
     
     
 }
 
+-(void)selectImage:(UITapGestureRecognizer *)sender
+{
+    NSLog(@"selectImage:%d",sender.view.tag);
+}
+
+
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    NSLog(@"offsetX:%f,offsetY:%f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+}
 
 @end

@@ -25,6 +25,13 @@
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
+        
+//        ViewController *temp = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
+//        UINavigationController *test =  [[UINavigationController alloc] initWithRootViewController:temp];
+//        self.viewController =(UIViewController *)test;
+//        [test setNavigationBarHidden:YES];
+        
+        
     } else {
         self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPad" bundle:nil] autorelease];
     }
