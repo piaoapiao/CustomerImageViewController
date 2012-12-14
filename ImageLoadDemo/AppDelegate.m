@@ -24,7 +24,13 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
+       // self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
+         //self.viewController = [[[ViewController alloc] init] autorelease];
+        UIViewController *ctrl = [[[ViewController alloc] init] autorelease];
+        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:ctrl];
+       // [navCtrl setToolbarHidden:YES];
+        [navCtrl setNavigationBarHidden:YES];
+        self.viewController = navCtrl;
         
 //        ViewController *temp = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
 //        UINavigationController *test =  [[UINavigationController alloc] initWithRootViewController:temp];

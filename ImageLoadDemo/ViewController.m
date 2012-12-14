@@ -6,8 +6,12 @@
 //  Copyright (c) 2012年 zyun2. All rights reserved.
 //
 
+// ---------------WSAssetPickerState
+
 #import "ViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "ImageDealViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface ViewController ()
 
@@ -16,6 +20,44 @@
 @implementation ViewController
 @synthesize assetGroups;
 @synthesize imageScrollView;
+@synthesize assetArray;
+@synthesize imageArray;
+@synthesize assetsLibrary = _assetsLibrary;
+
+-(id)init
+{
+    if(self == [super init])
+    {
+        [self loadImages];
+    }
+    return self;
+}
+
+-(ALAssetsLibrary *)assetsLibrary
+{
+    if (!_assetsLibrary) {
+        _assetsLibrary = [[ALAssetsLibrary alloc] init];
+    }
+    return _assetsLibrary;
+}
+
+-(NSMutableArray *)imageArray
+{
+    if(!imageArray)
+    {
+        imageArray = [[NSMutableArray alloc] init];
+    }
+    return imageArray;
+}
+
+-(NSMutableArray *)assetArray
+{
+    if(!assetArray)
+    {
+        assetArray = [[NSMutableArray alloc] init];
+    }
+    return assetArray;
+}
 
 
 -(BOOL)isSupportAutoLayOut
@@ -29,23 +71,11 @@
     return NO;
 }
 
-- (void)viewDidLoad
+-(void)loadImages
 {
-    [super viewDidLoad];
-    
-  //  NSString
-    
-    
-    
-
-    
-	// Do any additional setup after loading the view, typically from a nib.
-    
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
 	self.assetGroups = tempArray;
     [tempArray release];
-    
-    imageArray = [[NSMutableArray alloc] init];
     
     dispatch_async(dispatch_get_main_queue(), ^
                    {
@@ -55,10 +85,13 @@
                            if (result!=NULL) {
                                
                                if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto])
-                               {  
-//                                    NSLog(@"bigImage:%@",[UIImage imageWithCGImage:result.thumbnail]);
-                      //             [imageArray addObject:[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]];
-                                     [imageArray addObject:[UIImage imageWithCGImage:result.thumbnail]];
+                               {
+                                   //                                    NSLog(@"bigImage:%@",[UIImage imageWithCGImage:result.thumbnail]);
+                                   //             [imageArray addObject:[UIImage imageWithCGImage:result.defaultRepresentation.fullScreenImage]];
+                                   [result retain];
+                                   [self.assetArray addObject:result];
+                                   //[assetArray addObject: [result copy]];
+                                   [self.imageArray addObject:[UIImage imageWithCGImage:result.thumbnail]];
                                    
                                }
                            }
@@ -89,12 +122,12 @@
                                [group enumerateAssetsUsingBlock:groupEnumerAtion];
                                
                                // [albumArray addObject:group];
-                          //     NSString *str = [NSString stringWithFormat:@"%d", [group numberOfAssets]];
+                               //     NSString *str = [NSString stringWithFormat:@"%d", [group numberOfAssets]];
                                
                                //   [picsInAlbumArray addObject:str];
                                
                                //   [albumListTable reloadData];
-                               [self showImageView:imageArray];
+                              // [self showImageView:imageArray];
                            }
                            
                            // Reload albums
@@ -117,14 +150,39 @@
                        [library enumerateGroupsWithTypes:ALAssetsGroupAll
                                               usingBlock:assetGroupEnumerator
                                             failureBlock:assetGroupEnumberatorFailure];
+                      // [self performSelectorOnMainThread:@selector(showImageView:) withObject:self.assetGroups  waitUntilDone:YES];
                        
                        //  vtypedef void (^ALAssetsLibraryGroupsEnumerationResultsBlock)(ALAssetsGroup *group, BOOL *stop);
                        
                        
-                       [library release];
+                       //  [library release];
+                       
                        [pool release];
                    });
+
+}
+
+-(void)loadView
+{
+    UIView *tempView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+    self.view = tempView;
+
+    [tempView release];
+
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
     
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Default"  ofType:@"png"];
+    
+    NSLog(@"path:%@",path);
+    
+	// Do any additional setup after loading the view, typically from a nib.
+    
+      
 }
 
 - (void)didReceiveMemoryWarning
@@ -143,8 +201,8 @@
             
             imageScrollView  = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
             [imageScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-            int h = imageScrollView.contentSize.height;
-            int w = imageScrollView.contentSize.width;
+            int h = imageScrollView.frame.size.height;
+            int w = imageScrollView.frame.size.width;
             NSLog(@"H:%d,W:%d",h,w);
 
             h = imageScrollView.contentSize.height;
@@ -164,8 +222,10 @@
         {
              NSLog(@"manualLayOut");
              imageScrollView  = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+           //  imageScrollView  = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
              imageScrollView.delegate = self;
              [self.view addSubview:imageScrollView];
+            
         
         }
     }
@@ -179,7 +239,6 @@
 //展示图片
 -(void)showImageView:(NSArray *)imageList
 {
-    
     self.imageScrollView.backgroundColor = [UIColor redColor];
 
     int padding = 10;
@@ -200,7 +259,7 @@
          rowNum = (self.imageScrollView.frame.size.height-padding)/(imageHeight+ padding)+1;    
     }
     
-    for(int i = 0;i<imageArray.count;i++)
+    for(int i = 0;i<self.imageArray.count;i++)
     {
         int imageIndex = i%lineNum;
         
@@ -239,13 +298,93 @@
 -(void)selectImage:(UITapGestureRecognizer *)sender
 {
     NSLog(@"selectImage:%d",sender.view.tag);
+    int tag = sender.view.tag;
+    ALAsset *set = (ALAsset *)[assetArray objectAtIndex:tag];
+    UIImage *image = [UIImage imageWithCGImage:set.defaultRepresentation.fullScreenImage];
+    NSLog(@"W:%f H:%f",image.size.width,image.size.height);
+    ImageDealViewController *ctrl = [[ImageDealViewController alloc] initWithImage:image];
+    //ctrl.imageView.image = image;
+    
+//    CATransition *transition = [CATransition animation];
+//    transition.duration = 1.0f;
+//    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//  //  transition.type = @"cube";
+//    transition.type =@""
+////    transition.subtype = kCATransitionFromRight;
+//        transition.subtype = kCATransitionFromRight;
+//    transition.delegate = self;
+//        [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+//    [UIView beginAnimations:nil context:nil];
+//    [UIView setAnimationCurve:UIViewAnimationTransitionFlipFromRight];
+//    [UIView setAnimationDuration:0.5];
+//    UIViewAnimationTransition transition = UIViewAnimationOptionTransitionNone;  
+//    [UIView setAnimationTransition:transition forView:self.navigationController.view cache:YES];
+    
+    [UIView  beginAnimations:nil context:NULL];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.75];
+    [self.navigationController pushViewController:ctrl animated:NO];
+    [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.navigationController.view cache:NO];
+    [UIView commitAnimations];
+  //  [nextView release];
+    
+    
+//    CATransition* transition = [CATransition animation];
+//    transition.duration = 0.5;
+//    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//    transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+//    //transition.subtype = kCATransitionFromTop; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+//    [self.navigationController pushViewController:ctrl animated:YES];
+//    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+    
+
+    for(ALAssetsGroup * group in self.assetGroups)
+    {
+        NSString *str = [NSString stringWithFormat:@"%@", [group valueForProperty:ALAssetsGroupPropertyName]];
+        NSLog(@"album:%@",str);
+    }
+    
+     
 }
 
 
 
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//    NSLog(@"offsetX:%f,offsetY:%f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+//}
+
+- (NSUInteger)supportedInterfaceOrientations
 {
-    NSLog(@"offsetX:%f,offsetY:%f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+    //return UIInterfaceOrientationLandscapeLeft|UIInterfaceOrientationMaskLandscapeRight|UIInterfaceOrientationMaskPortraitUpsideDown|UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskPortrait;
+
 }
+
+//-(void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//   
+//}
+//
+//-(void)updateViewConstraints
+//{
+//    
+//    [super updateViewConstraints];
+//    [self removeImageView];
+//     [self showImageView:imageArray];
+//}
+//
+//-(void)removeImageView
+//{
+//    for(UIImageView *item in self.imageScrollView.subviews)
+//    {
+//        [item removeFromSuperview];
+//    }
+//}
+
+
 
 @end

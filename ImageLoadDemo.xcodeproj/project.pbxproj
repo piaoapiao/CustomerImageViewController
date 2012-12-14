@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D96F327167AF31500CCD17E /* ImageDealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D96F326167AF31500CCD17E /* ImageDealViewController.m */; };
+		0D96F329167AFF0600CCD17E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D96F328167AFF0600CCD17E /* QuartzCore.framework */; };
 		0D9C59E81678775500831CCF /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D9C59E71678775500831CCF /* AssetsLibrary.framework */; };
 		0DC287381678605F009D50B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DC287371678605F009D50B3 /* UIKit.framework */; };
 		0DC2873A1678605F009D50B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DC287391678605F009D50B3 /* Foundation.framework */; };
@@ -18,7 +20,6 @@
 		0DC2874C16786060009D50B3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DC2874B16786060009D50B3 /* Default@2x.png */; };
 		0DC2874E16786060009D50B3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0DC2874D16786060009D50B3 /* Default-568h@2x.png */; };
 		0DC2875116786060009D50B3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC2875016786060009D50B3 /* ViewController.m */; };
-		0DC2875416786060009D50B3 /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DC2875216786060009D50B3 /* ViewController_iPhone.xib */; };
 		0DC2875716786060009D50B3 /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DC2875516786060009D50B3 /* ViewController_iPad.xib */; };
 		0DC2875F16786060009D50B3 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DC2875E16786060009D50B3 /* SenTestingKit.framework */; };
 		0DC2876016786060009D50B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DC287371678605F009D50B3 /* UIKit.framework */; };
@@ -38,6 +39,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D96F325167AF31500CCD17E /* ImageDealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDealViewController.h; sourceTree = "<group>"; };
+		0D96F326167AF31500CCD17E /* ImageDealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDealViewController.m; sourceTree = "<group>"; };
+		0D96F328167AFF0600CCD17E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0D9C59E71678775500831CCF /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		0DC287331678605F009D50B3 /* ImageLoadDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageLoadDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DC287371678605F009D50B3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -54,7 +58,6 @@
 		0DC2874D16786060009D50B3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		0DC2874F16786060009D50B3 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		0DC2875016786060009D50B3 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		0DC2875316786060009D50B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
 		0DC2875616786060009D50B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
 		0DC2875D16786060009D50B3 /* ImageLoadDemoTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageLoadDemoTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DC2875E16786060009D50B3 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -69,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D96F329167AFF0600CCD17E /* QuartzCore.framework in Frameworks */,
 				0D9C59E81678775500831CCF /* AssetsLibrary.framework in Frameworks */,
 				0DC287381678605F009D50B3 /* UIKit.framework in Frameworks */,
 				0DC2873A1678605F009D50B3 /* Foundation.framework in Frameworks */,
@@ -111,6 +115,7 @@
 		0DC287361678605F009D50B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D96F328167AFF0600CCD17E /* QuartzCore.framework */,
 				0D9C59E71678775500831CCF /* AssetsLibrary.framework */,
 				0DC287371678605F009D50B3 /* UIKit.framework */,
 				0DC287391678605F009D50B3 /* Foundation.framework */,
@@ -127,9 +132,10 @@
 				0DC2874716786060009D50B3 /* AppDelegate.m */,
 				0DC2874F16786060009D50B3 /* ViewController.h */,
 				0DC2875016786060009D50B3 /* ViewController.m */,
-				0DC2875216786060009D50B3 /* ViewController_iPhone.xib */,
 				0DC2875516786060009D50B3 /* ViewController_iPad.xib */,
 				0DC2873E1678605F009D50B3 /* Supporting Files */,
+				0D96F325167AF31500CCD17E /* ImageDealViewController.h */,
+				0D96F326167AF31500CCD17E /* ImageDealViewController.m */,
 			);
 			path = ImageLoadDemo;
 			sourceTree = "<group>";
@@ -242,7 +248,6 @@
 				0DC2874A16786060009D50B3 /* Default.png in Resources */,
 				0DC2874C16786060009D50B3 /* Default@2x.png in Resources */,
 				0DC2874E16786060009D50B3 /* Default-568h@2x.png in Resources */,
-				0DC2875416786060009D50B3 /* ViewController_iPhone.xib in Resources */,
 				0DC2875716786060009D50B3 /* ViewController_iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,6 +286,7 @@
 				0DC287441678605F009D50B3 /* main.m in Sources */,
 				0DC2874816786060009D50B3 /* AppDelegate.m in Sources */,
 				0DC2875116786060009D50B3 /* ViewController.m in Sources */,
+				0D96F327167AF31500CCD17E /* ImageDealViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,14 +315,6 @@
 				0DC287411678605F009D50B3 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		0DC2875216786060009D50B3 /* ViewController_iPhone.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0DC2875316786060009D50B3 /* en */,
-			);
-			name = ViewController_iPhone.xib;
 			sourceTree = "<group>";
 		};
 		0DC2875516786060009D50B3 /* ViewController_iPad.xib */ = {
@@ -398,7 +396,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ImageLoadDemo/ImageLoadDemo-Prefix.pch";
 				INFOPLIST_FILE = "ImageLoadDemo/ImageLoadDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -409,7 +409,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ImageLoadDemo/ImageLoadDemo-Prefix.pch";
 				INFOPLIST_FILE = "ImageLoadDemo/ImageLoadDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
